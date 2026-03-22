@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "/Users/peterphua/.nvm/versions/node/v22.22.0/bin/npx",
+      "runtimeArgs": ["next", "dev", "--turbopack"],
+      "port": 3000
+    }
+  ]
+}
