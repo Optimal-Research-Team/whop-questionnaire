@@ -11,7 +11,7 @@ import {
   Info,
   MessageSquare,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { cn } from "../lib/utils";
 import {
   FlagCategory,
@@ -99,13 +99,7 @@ export function QuestionScreen({
   goNext,
   goBack,
 }: QuestionScreenProps) {
-  const [notesExpanded, setNotesExpanded] = useState(false);
   const [clinicianNotesOpen, setClinicianNotesOpen] = useState(true);
-
-  // Reset notes expanded when changing questions
-  useEffect(() => {
-    setNotesExpanded(false);
-  }, [currentIndex]);
 
   if (!currentItem) return null;
 
@@ -255,28 +249,18 @@ export function QuestionScreen({
                 </div>
               )}
 
-              {/* Additional Notes */}
+              {/* Notes */}
               <div>
-                <button
-                  onClick={() => setNotesExpanded(!notesExpanded)}
-                  className="flex items-center gap-1.5 text-sm text-warm-500 hover:text-warm-700 transition-colors cursor-pointer"
-                >
-                  {notesExpanded ? (
-                    <ChevronUp className="w-4 h-4" />
-                  ) : (
-                    <ChevronDown className="w-4 h-4" />
-                  )}
-                  Additional notes
-                </button>
-                {notesExpanded && (
-                  <textarea
-                    value={currentAnswer?.notes || ""}
-                    onChange={(e) => setNotes(q.id, e.target.value)}
-                    placeholder="Add context or details..."
-                    rows={2}
-                    className="w-full mt-2 px-4 py-3 bg-white border border-warm-200 rounded-xl text-warm-900 placeholder:text-warm-400 focus:outline-none focus:ring-2 focus:ring-warm-300 focus:border-transparent transition-all text-sm"
-                  />
-                )}
+                <label className="block text-xs font-medium text-warm-500 uppercase tracking-wider mb-2">
+                  Notes
+                </label>
+                <textarea
+                  value={currentAnswer?.notes || ""}
+                  onChange={(e) => setNotes(q.id, e.target.value)}
+                  placeholder="Add context or details..."
+                  rows={2}
+                  className="w-full px-4 py-3 bg-white border border-warm-200 rounded-xl text-warm-900 placeholder:text-warm-400 focus:outline-none focus:ring-2 focus:ring-warm-300 focus:border-transparent transition-all text-sm"
+                />
               </div>
 
               {/* Clinician Notes */}
