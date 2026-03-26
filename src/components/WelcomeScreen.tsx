@@ -44,7 +44,7 @@ export function WelcomeScreen({
 
         {/* Form Card */}
         <div className="bg-white rounded-2xl border border-warm-200 p-8 shadow-sm">
-          <div className="space-y-5">
+          <form onSubmit={(e) => { e.preventDefault(); if (canStart) startScreening(); }} className="space-y-5">
             <div>
               <label
                 htmlFor="patientName"
@@ -82,7 +82,7 @@ export function WelcomeScreen({
 
             <div className="pt-2">
               <button
-                onClick={startScreening}
+                type="submit"
                 disabled={!canStart}
                 className="w-full flex items-center justify-center gap-2 px-6 py-3.5 bg-warm-800 hover:bg-warm-900 disabled:bg-warm-300 disabled:cursor-not-allowed text-white rounded-xl font-medium transition-all text-[15px] cursor-pointer"
               >
@@ -90,7 +90,7 @@ export function WelcomeScreen({
                 <ArrowRight className="w-4 h-4" />
               </button>
             </div>
-          </div>
+          </form>
         </div>
 
         {/* Footer */}

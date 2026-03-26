@@ -38,6 +38,7 @@ export function generateSummary(
       lines.push('OUTSIDE SCOPE (Do NOT book):');
       for (const f of outsideScope) {
         lines.push(`  - ${f.questionText}`);
+        lines.push(`    Note: ${f.clinicianNotes}`);
       }
     }
 
@@ -46,6 +47,7 @@ export function generateSummary(
       lines.push('ABSOLUTE CONTRAINDICATIONS:');
       for (const f of absoluteCI) {
         lines.push(`  - ${f.questionText}`);
+        lines.push(`    Note: ${f.clinicianNotes}`);
       }
     }
 
@@ -54,6 +56,7 @@ export function generateSummary(
       lines.push('RELATIVE CONTRAINDICATIONS:');
       for (const f of relativeCI) {
         lines.push(`  - ${f.questionText}`);
+        lines.push(`    Note: ${f.clinicianNotes}`);
       }
     }
 
@@ -62,6 +65,7 @@ export function generateSummary(
       lines.push('NOTES FOR NP:');
       for (const f of notes) {
         lines.push(`  - ${f.questionText}`);
+        lines.push(`    Note: ${f.clinicianNotes}`);
       }
     }
 

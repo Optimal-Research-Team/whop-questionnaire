@@ -11,7 +11,6 @@ export const sections: Section[] = [
         text: 'Age',
         inputType: 'number',
         category: 'RELATIVE_CI',
-        triggerOn: 'yes',
         clinicianNotes:
           'Age >60 = higher risk group for systemic estrogen — not an absolute CI. Vaginal estrogens, DHEA, testosterone, and pregnenolone remain safe options. Flag for NP to assess individually. Note: PO/topical estradiol may still be an option, but patient must be informed of the higher risk profile and an informed decision discussion must take place with the NP.',
       },
@@ -20,7 +19,6 @@ export const sections: Section[] = [
         text: 'Date of last menstrual period',
         inputType: 'date',
         category: 'RELATIVE_CI',
-        triggerOn: 'yes',
         clinicianNotes:
           '>10 yrs post-menopause = higher risk for systemic estrogen — not an absolute CI. Vaginal estrogens, DHEA, testosterone, and pregnenolone remain safe options. Flag for NP to assess individually. Note: PO/topical estradiol may still be an option, but patient must be informed of the higher risk profile and an informed decision discussion must take place with the NP.',
       },

@@ -187,6 +187,9 @@ export function QuestionScreen({
                         ? "Enter days"
                         : "Enter number"
                     }
+                    min={1}
+                    max={q.id === "age" ? 120 : q.id === "cycle_length" ? 365 : undefined}
+                    step={1}
                     className="w-full max-w-xs px-4 py-3 bg-white border-2 border-warm-200 rounded-xl text-warm-900 placeholder:text-warm-400 focus:outline-none focus:ring-2 focus:ring-warm-300 focus:border-transparent transition-all text-[15px]"
                     autoFocus
                   />
@@ -197,6 +200,7 @@ export function QuestionScreen({
                     type="date"
                     value={currentAnswer?.value || ""}
                     onChange={(e) => setAnswer(q.id, e.target.value)}
+                    max={new Date().toISOString().split("T")[0]}
                     className="w-full max-w-xs px-4 py-3 bg-white border-2 border-warm-200 rounded-xl text-warm-900 focus:outline-none focus:ring-2 focus:ring-warm-300 focus:border-transparent transition-all text-[15px]"
                   />
                 )}

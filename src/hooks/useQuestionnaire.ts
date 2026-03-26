@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Answer, TriggeredFlag } from '../lib/types';
-import { getAllQuestions } from '../data/questions';
+import { getAllQuestions, sections } from '../data/questions';
 
 export type Screen = 'welcome' | 'questionnaire' | 'summary';
 
@@ -33,6 +33,14 @@ export function useQuestionnaire() {
           value,
           notes: notes ?? existing?.notes ?? '',
         });
+        // Clear answers for any conditional child questions that depend on this one
+        for (const section of sections) {
+          for (const q of section.questions) {
+            if (q.conditionalOn?.questionId === questionId) {
+              next.delete(q.id);
+            }
+          }
+        }
         return next;
       });
     },
@@ -58,8 +66,9 @@ export function useQuestionnaire() {
     if (!currentItem) return null;
     const q = currentItem.question;
     const answer = answers.get(q.id);
-    if (!answer || !q.category || !q.triggerOn) return null;
+    if (!answer || !q.category) return null;
 
+    // Custom logic for age (numeric threshold, no triggerOn)
     if (q.id === 'age') {
       const age = parseInt(answer.value, 10);
       if (!isNaN(age) && age > 60) {
@@ -68,18 +77,23 @@ export function useQuestionnaire() {
       return null;
     }
 
+    // Custom logic for LMP (date threshold, no triggerOn)
     if (q.id === 'last_menstrual_period') {
       if (answer.value) {
         const lmpDate = new Date(answer.value);
-        const now = new Date();
-        const yearsDiff = (now.getTime() - lmpDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-        if (yearsDiff > 10) {
-          return { questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes };
+        if (!isNaN(lmpDate.getTime())) {
+          const now = new Date();
+          const yearsDiff = (now.getTime() - lmpDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+          if (yearsDiff > 10) {
+            return { questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes };
+          }
         }
       }
       return null;
     }
 
+    // Generic triggerOn logic for all other questions
+    if (!q.triggerOn) return null;
     if (answer.value === q.triggerOn) {
       return { questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes };
     }
@@ -92,7 +106,7 @@ export function useQuestionnaire() {
     for (const item of visibleQuestions) {
       const q = item.question;
       const answer = answers.get(q.id);
-      if (!answer || !q.category || !q.triggerOn) continue;
+      if (!answer || !q.category) continue;
 
       if (q.id === 'age') {
         const age = parseInt(answer.value, 10);
@@ -105,15 +119,18 @@ export function useQuestionnaire() {
       if (q.id === 'last_menstrual_period') {
         if (answer.value) {
           const lmpDate = new Date(answer.value);
-          const now = new Date();
-          const yearsDiff = (now.getTime() - lmpDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
-          if (yearsDiff > 10) {
-            flags.push({ questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes });
+          if (!isNaN(lmpDate.getTime())) {
+            const now = new Date();
+            const yearsDiff = (now.getTime() - lmpDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
+            if (yearsDiff > 10) {
+              flags.push({ questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes });
+            }
           }
         }
         continue;
       }
 
+      if (!q.triggerOn) continue;
       if (answer.value === q.triggerOn) {
         flags.push({ questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes });
       }
