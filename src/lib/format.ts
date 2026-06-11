@@ -14,7 +14,10 @@ export function formatAnswer(question: Question, answer: Answer | undefined): st
   }
   if (question.id === 'age') return `${value} years`;
   if (question.inputType === 'date') {
-    const d = new Date(value);
+    // Date inputs give YYYY-MM-DD; appending T00:00:00 parses it in LOCAL time.
+    // Bare new Date('YYYY-MM-DD') parses as UTC midnight and renders the
+    // previous day in any UTC-negative timezone.
+    const d = new Date(value + 'T00:00:00');
     if (!isNaN(d.getTime())) {
       return d.toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' });
     }

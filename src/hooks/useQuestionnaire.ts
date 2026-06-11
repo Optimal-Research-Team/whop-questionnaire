@@ -80,7 +80,7 @@ export function useQuestionnaire() {
     // Custom logic for LMP (date threshold, no triggerOn)
     if (q.id === 'last_menstrual_period') {
       if (answer.value) {
-        const lmpDate = new Date(answer.value);
+        const lmpDate = new Date(answer.value + 'T00:00:00');
         if (!isNaN(lmpDate.getTime())) {
           const now = new Date();
           const yearsDiff = (now.getTime() - lmpDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
@@ -118,7 +118,7 @@ export function useQuestionnaire() {
 
       if (q.id === 'last_menstrual_period') {
         if (answer.value) {
-          const lmpDate = new Date(answer.value);
+          const lmpDate = new Date(answer.value + 'T00:00:00');
           if (!isNaN(lmpDate.getTime())) {
             const now = new Date();
             const yearsDiff = (now.getTime() - lmpDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
