@@ -5,10 +5,11 @@ import { motion } from "framer-motion";
 import { Copy, Check, RotateCcw, AlertTriangle, XOctagon, Info, CheckCircle2 } from "lucide-react";
 import { cn } from "../lib/utils";
 import { generateSummary } from "../lib/summary";
+import { formatAdministeredAt } from "../lib/format";
 import { Answer, TriggeredFlag, FlagCategory } from "../lib/types";
 
 interface SummaryScreenProps {
-  patientName: string;
+  administeredAt: string;
   screenerName: string;
   answers: Map<string, Answer>;
   allFlags: TriggeredFlag[];
@@ -36,7 +37,7 @@ function FlagBadgeIcon({ category }: { category: FlagCategory }) {
 }
 
 export function SummaryScreen({
-  patientName,
+  administeredAt,
   screenerName,
   answers,
   allFlags,
@@ -45,8 +46,8 @@ export function SummaryScreen({
   const [copied, setCopied] = useState(false);
 
   const summaryText = useMemo(
-    () => generateSummary(patientName, screenerName, answers, allFlags),
-    [patientName, screenerName, answers, allFlags]
+    () => generateSummary(administeredAt, screenerName, answers, allFlags),
+    [administeredAt, screenerName, answers, allFlags]
   );
 
   const handleCopy = async () => {
@@ -93,12 +94,11 @@ export function SummaryScreen({
           <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-sage-600 mb-2">
             Screening Complete
           </p>
-          <h1 className="font-serif text-[2.3rem] leading-tight font-medium text-warm-900 mb-1">
-            {patientName || "Patient"}
+          <h1 className="font-serif text-[2.1rem] leading-tight font-medium text-warm-900 mb-1">
+            {formatAdministeredAt(administeredAt)}
           </h1>
           <p className="text-warm-500 text-sm">
-            {new Date().toLocaleDateString("en-CA", { year: "numeric", month: "long", day: "numeric" })}
-            {screenerName ? ` · Screened by ${screenerName}` : ""}
+            {screenerName ? `Screened by ${screenerName}` : "Pre-screening summary"}
           </p>
         </div>
 

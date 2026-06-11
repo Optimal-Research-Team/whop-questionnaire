@@ -6,7 +6,7 @@ export type Screen = 'welcome' | 'questionnaire' | 'summary';
 
 export function useQuestionnaire() {
   const [screen, setScreen] = useState<Screen>('welcome');
-  const [patientName, setPatientName] = useState('');
+  const [administeredAt, setAdministeredAt] = useState('');
   const [screenerName, setScreenerName] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Map<string, Answer>>(new Map());
@@ -167,7 +167,7 @@ export function useQuestionnaire() {
 
   const resetAll = useCallback(() => {
     setScreen('welcome');
-    setPatientName('');
+    setAdministeredAt('');
     setScreenerName('');
     setCurrentIndex(0);
     setAnswers(new Map());
@@ -190,7 +190,7 @@ export function useQuestionnaire() {
   }, [currentSection, visibleQuestions, currentItem]);
 
   return {
-    screen, patientName, setPatientName, screenerName, setScreenerName,
+    screen, administeredAt, setAdministeredAt, screenerName, setScreenerName,
     currentIndex, totalQuestions, currentItem, currentAnswer, currentFlag,
     currentSection, sectionProgress, allFlags, answers, canGoNext,
     setAnswer, setNotes, goNext, goBack, startScreening, resetAll, setScreen,

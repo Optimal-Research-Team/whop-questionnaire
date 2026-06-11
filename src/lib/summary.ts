@@ -8,7 +8,7 @@ import {
   disclaimerFor,
 } from './types';
 import { getAllQuestions } from '../data/questions';
-import { formatAnswer } from './format';
+import { formatAnswer, formatAdministeredAt } from './format';
 
 const DISCLAIMER_LABELS: { text: string; label: string }[] = [
   { text: OUTSIDE_SCOPE_DISCLAIMER, label: 'OUTSIDE SCOPE DISCLAIMER DELIVERED:' },
@@ -17,25 +17,19 @@ const DISCLAIMER_LABELS: { text: string; label: string }[] = [
 ];
 
 export function generateSummary(
-  patientName: string,
+  administeredAt: string,
   screenerName: string,
   answers: Map<string, Answer>,
   flags: TriggeredFlag[]
 ): string {
-  const date = new Date().toLocaleDateString('en-CA', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
-
   const lines: string[] = [];
 
   lines.push('WHOP PHONE PRE-SCREENING QUESTIONNAIRE');
   lines.push('='.repeat(50));
   lines.push('');
-  lines.push(`Patient: ${patientName || 'Not provided'}`);
-  lines.push(`Date: ${date}`);
+  lines.push(`Administered: ${formatAdministeredAt(administeredAt)}`);
   lines.push(`Screened by: ${screenerName || 'Not provided'}`);
+  lines.push('No PHI recorded — attach this note to the patient chart in the EMR.');
   lines.push('');
 
   const outsideScope = flags.filter((f) => f.category === 'OUTSIDE_SCOPE');

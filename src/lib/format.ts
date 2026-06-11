@@ -26,6 +26,17 @@ export function formatAnswer(question: Question, answer: Answer | undefined): st
   return value;
 }
 
+/** Renders a datetime-local value ("YYYY-MM-DDTHH:mm") for display. Values with a
+ *  time component parse as local time, so no UTC day-shift correction is needed. */
+export function formatAdministeredAt(value: string): string {
+  if (!value) return 'Not recorded';
+  const d = new Date(value);
+  if (isNaN(d.getTime())) return value;
+  const date = d.toLocaleDateString('en-CA', { year: 'numeric', month: 'long', day: 'numeric' });
+  const time = d.toLocaleTimeString('en-CA', { hour: 'numeric', minute: '2-digit' });
+  return `${date} at ${time}`;
+}
+
 export interface AnsweredItem {
   question: Question;
   sectionTitle: string;

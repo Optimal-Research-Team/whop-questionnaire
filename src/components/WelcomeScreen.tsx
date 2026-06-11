@@ -1,11 +1,12 @@
 "use client";
 
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 
 interface WelcomeScreenProps {
-  patientName: string;
-  setPatientName: (name: string) => void;
+  administeredAt: string;
+  setAdministeredAt: (value: string) => void;
   screenerName: string;
   setScreenerName: (name: string) => void;
   startScreening: () => void;
@@ -24,14 +25,28 @@ function LeafMark({ className = "" }: { className?: string }) {
   );
 }
 
+/** Current local date+time in datetime-local input format (YYYY-MM-DDTHH:mm). */
+function localNow(): string {
+  const d = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
+
 export function WelcomeScreen({
-  patientName,
-  setPatientName,
+  administeredAt,
+  setAdministeredAt,
   screenerName,
   setScreenerName,
   startScreening,
 }: WelcomeScreenProps) {
-  const canStart = patientName.trim().length > 0;
+  // Prefill with "now" on the client only — prerendered HTML must stay empty
+  // to avoid a hydration mismatch on the static export.
+  useEffect(() => {
+    if (!administeredAt) setAdministeredAt(localNow());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const canStart = administeredAt.trim().length > 0;
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6">
@@ -72,19 +87,17 @@ export function WelcomeScreen({
           >
             <div>
               <label
-                htmlFor="patientName"
+                htmlFor="administeredAt"
                 className="block text-xs font-semibold text-warm-500 uppercase tracking-[0.14em] mb-2"
               >
-                Patient Name <span className="text-flag-outside">*</span>
+                Date &amp; Time of Screening <span className="text-flag-outside">*</span>
               </label>
               <input
-                id="patientName"
-                type="text"
-                value={patientName}
-                onChange={(e) => setPatientName(e.target.value)}
-                placeholder="Enter patient's full name"
-                className="w-full px-4 py-3 bg-cream-100 border border-warm-200 rounded-xl text-warm-900 placeholder:text-warm-400 focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-sage-400 transition-all text-[15px]"
-                autoFocus
+                id="administeredAt"
+                type="datetime-local"
+                value={administeredAt}
+                onChange={(e) => setAdministeredAt(e.target.value)}
+                className="w-full px-4 py-3 bg-cream-100 border border-warm-200 rounded-xl text-warm-900 focus:outline-none focus:ring-2 focus:ring-sage-300 focus:border-sage-400 transition-all text-[15px]"
               />
             </div>
 
@@ -118,8 +131,19 @@ export function WelcomeScreen({
           </form>
         </div>
 
+        {/* No PHI disclaimer */}
+        <div className="mt-5 flex items-start gap-3 rounded-2xl border border-sage-200/80 bg-sage-50/70 px-4 py-3.5">
+          <ShieldCheck className="w-[18px] h-[18px] text-sage-600 mt-0.5 shrink-0" />
+          <p className="text-[12.5px] leading-relaxed text-sage-800">
+            <span className="font-semibold">No PHI.</span> Do not enter patient
+            names or other identifying information anywhere in this tool. Responses
+            exist only in this browser tab — nothing is transmitted or stored — and
+            are erased when you start a new screening or close the page.
+          </p>
+        </div>
+
         {/* Footer */}
-        <p className="text-center text-xs text-warm-400 mt-7 leading-relaxed">
+        <p className="text-center text-xs text-warm-400 mt-6 leading-relaxed">
           This is a pre-screening tool only. All clinical decisions
           <br />
           are made by the supervising Nurse Practitioner.
