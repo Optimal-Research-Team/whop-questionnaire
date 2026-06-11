@@ -72,7 +72,7 @@ export function useQuestionnaire() {
     if (q.id === 'age') {
       const age = parseInt(answer.value, 10);
       if (!isNaN(age) && age > 60) {
-        return { questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes };
+        return { questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes, customDisclaimer: q.customDisclaimer };
       }
       return null;
     }
@@ -85,7 +85,7 @@ export function useQuestionnaire() {
           const now = new Date();
           const yearsDiff = (now.getTime() - lmpDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
           if (yearsDiff > 10) {
-            return { questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes };
+            return { questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes, customDisclaimer: q.customDisclaimer };
           }
         }
       }
@@ -95,7 +95,7 @@ export function useQuestionnaire() {
     // Generic triggerOn logic for all other questions
     if (!q.triggerOn) return null;
     if (answer.value === q.triggerOn) {
-      return { questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes };
+      return { questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes, customDisclaimer: q.customDisclaimer };
     }
 
     return null;
@@ -111,7 +111,7 @@ export function useQuestionnaire() {
       if (q.id === 'age') {
         const age = parseInt(answer.value, 10);
         if (!isNaN(age) && age > 60) {
-          flags.push({ questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes });
+          flags.push({ questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes, customDisclaimer: q.customDisclaimer });
         }
         continue;
       }
@@ -123,7 +123,7 @@ export function useQuestionnaire() {
             const now = new Date();
             const yearsDiff = (now.getTime() - lmpDate.getTime()) / (1000 * 60 * 60 * 24 * 365.25);
             if (yearsDiff > 10) {
-              flags.push({ questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes });
+              flags.push({ questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes, customDisclaimer: q.customDisclaimer });
             }
           }
         }
@@ -132,7 +132,7 @@ export function useQuestionnaire() {
 
       if (!q.triggerOn) continue;
       if (answer.value === q.triggerOn) {
-        flags.push({ questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes });
+        flags.push({ questionId: q.id, questionText: q.text, category: q.category, clinicianNotes: q.clinicianNotes, customDisclaimer: q.customDisclaimer });
       }
     }
     return flags;

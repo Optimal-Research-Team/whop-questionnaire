@@ -1,5 +1,20 @@
-import { Answer, TriggeredFlag, FLAG_LABELS, CI_DISCLAIMER, OUTSIDE_SCOPE_DISCLAIMER } from './types';
+import {
+  Answer,
+  TriggeredFlag,
+  FLAG_LABELS,
+  CI_DISCLAIMER,
+  OUTSIDE_SCOPE_DISCLAIMER,
+  SUPPORTIVE_CARE_DISCLAIMER,
+  disclaimerFor,
+} from './types';
 import { getAllQuestions } from '../data/questions';
+import { formatAnswer } from './format';
+
+const DISCLAIMER_LABELS: { text: string; label: string }[] = [
+  { text: OUTSIDE_SCOPE_DISCLAIMER, label: 'OUTSIDE SCOPE DISCLAIMER DELIVERED:' },
+  { text: SUPPORTIVE_CARE_DISCLAIMER, label: 'SUPPORTIVE CARE PATHWAY OFFERED:' },
+  { text: CI_DISCLAIMER, label: 'CI DISCLAIMER DELIVERED:' },
+];
 
 export function generateSummary(
   patientName: string,
@@ -28,58 +43,36 @@ export function generateSummary(
   const relativeCI = flags.filter((f) => f.category === 'RELATIVE_CI');
   const notes = flags.filter((f) => f.category === 'NOTE');
 
+  const pushFlagGroup = (heading: string, group: TriggeredFlag[]) => {
+    if (group.length === 0) return;
+    lines.push('');
+    lines.push(heading);
+    for (const f of group) {
+      lines.push(`  - ${f.questionText}`);
+      if (f.clinicianNotes) lines.push(`    Note: ${f.clinicianNotes}`);
+    }
+  };
+
   if (flags.length > 0) {
     lines.push('-'.repeat(50));
     lines.push('FLAGS SUMMARY');
     lines.push('-'.repeat(50));
 
-    if (outsideScope.length > 0) {
-      lines.push('');
-      lines.push('OUTSIDE SCOPE (Do NOT book):');
-      for (const f of outsideScope) {
-        lines.push(`  - ${f.questionText}`);
-        lines.push(`    Note: ${f.clinicianNotes}`);
-      }
-    }
-
-    if (absoluteCI.length > 0) {
-      lines.push('');
-      lines.push('ABSOLUTE CONTRAINDICATIONS:');
-      for (const f of absoluteCI) {
-        lines.push(`  - ${f.questionText}`);
-        lines.push(`    Note: ${f.clinicianNotes}`);
-      }
-    }
-
-    if (relativeCI.length > 0) {
-      lines.push('');
-      lines.push('RELATIVE CONTRAINDICATIONS:');
-      for (const f of relativeCI) {
-        lines.push(`  - ${f.questionText}`);
-        lines.push(`    Note: ${f.clinicianNotes}`);
-      }
-    }
-
-    if (notes.length > 0) {
-      lines.push('');
-      lines.push('NOTES FOR NP:');
-      for (const f of notes) {
-        lines.push(`  - ${f.questionText}`);
-        lines.push(`    Note: ${f.clinicianNotes}`);
-      }
-    }
+    pushFlagGroup('OUTSIDE SCOPE (Do NOT book for hormone therapy):', outsideScope);
+    pushFlagGroup('ABSOLUTE CONTRAINDICATIONS:', absoluteCI);
+    pushFlagGroup('RELATIVE CONTRAINDICATIONS:', relativeCI);
+    pushFlagGroup('NOTES FOR NP:', notes);
 
     lines.push('');
 
-    if (outsideScope.length > 0) {
-      lines.push('OUTSIDE SCOPE DISCLAIMER DELIVERED:');
-      lines.push(`"${OUTSIDE_SCOPE_DISCLAIMER}"`);
-      lines.push('');
-    }
-    if (absoluteCI.length > 0 || relativeCI.length > 0) {
-      lines.push('CI DISCLAIMER DELIVERED:');
-      lines.push(`"${CI_DISCLAIMER}"`);
-      lines.push('');
+    // List each distinct patient-facing disclaimer that was delivered.
+    const delivered = new Set(flags.map(disclaimerFor).filter(Boolean));
+    for (const { text, label } of DISCLAIMER_LABELS) {
+      if (delivered.has(text)) {
+        lines.push(label);
+        lines.push(`"${text}"`);
+        lines.push('');
+      }
     }
   } else {
     lines.push('No contraindications or flags identified.');
@@ -99,15 +92,7 @@ export function generateSummary(
 
     const answer = answers.get(item.question.id);
     const flag = flags.find((f) => f.questionId === item.question.id);
-
-    let answerDisplay = answer?.value || 'Not answered';
-    if (item.question.inputType === 'yes_no') {
-      answerDisplay = answer?.value === 'yes' ? 'Yes' : answer?.value === 'no' ? 'No' : 'Not answered';
-    } else if (item.question.id === 'age') {
-      answerDisplay = answer?.value ? `${answer.value} years` : 'Not provided';
-    } else if (item.question.id === 'cycle_length') {
-      answerDisplay = answer?.value ? `${answer.value} days` : 'Not provided';
-    }
+    const answerDisplay = formatAnswer(item.question, answer);
 
     const flagLabel = flag ? ` [${FLAG_LABELS[flag.category]}]` : '';
     lines.push(`Q: ${item.question.text}`);

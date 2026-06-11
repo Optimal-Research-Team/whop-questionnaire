@@ -1,4 +1,5 @@
 import { Section, Question, Answer } from '../lib/types';
+import { SUPPORTIVE_CARE_DISCLAIMER } from '../lib/types';
 
 export const sections: Section[] = [
   {
@@ -7,20 +8,22 @@ export const sections: Section[] = [
     description: 'Basic patient information for risk assessment.',
     questions: [
       {
+        // NP #1 — keep question, clinician notes removed
         id: 'age',
         text: 'Age',
         inputType: 'number',
         category: 'RELATIVE_CI',
-        clinicianNotes:
-          'Age >60 = higher risk group for systemic estrogen — not an absolute CI. Vaginal estrogens, DHEA, testosterone, and pregnenolone remain safe options. Flag for NP to assess individually. Note: PO/topical estradiol may still be an option, but patient must be informed of the higher risk profile and an informed decision discussion must take place with the NP.',
+        clinicianNotes: '',
+        shortLabel: 'Age',
       },
       {
+        // NP #2 — keep question, clinician notes removed
         id: 'last_menstrual_period',
         text: 'Date of last menstrual period',
         inputType: 'date',
         category: 'RELATIVE_CI',
-        clinicianNotes:
-          '>10 yrs post-menopause = higher risk for systemic estrogen — not an absolute CI. Vaginal estrogens, DHEA, testosterone, and pregnenolone remain safe options. Flag for NP to assess individually. Note: PO/topical estradiol may still be an option, but patient must be informed of the higher risk profile and an informed decision discussion must take place with the NP.',
+        clinicianNotes: '',
+        shortLabel: 'Last menstrual period',
       },
     ],
   },
@@ -29,53 +32,37 @@ export const sections: Section[] = [
     title: 'Cycling',
     description: 'Menstrual cycle history and changes.',
     questions: [
+      // NP #3 (Cycling regularly?) — removed per NP
+      // NP #4 (Cycle length) — removed per NP
       {
-        id: 'cycling_regularly',
-        text: 'Cycling regularly?',
-        inputType: 'yes_no',
-        category: null,
-        clinicianNotes: 'Context for perimenopause staging.',
-      },
-      {
-        id: 'cycle_length',
-        text: 'Cycle length (Day 1 of true bleeding to day before next Day 1)',
-        inputType: 'number',
-        category: null,
-        clinicianNotes:
-          'Documents cycle regularity. Remind patient that only true bleeding counts — spotting does not qualify as Day 1.',
-        helpfulProbe: 'Note: spotting does not count as Day 1.',
-      },
-      {
+        // NP #5 — keep as-is
         id: 'period_concerns',
         text: 'Any particular concerns re: periods through life, or largely normal/regular?',
         inputType: 'yes_no',
         category: null,
         clinicianNotes: 'Note any prior pathology.',
+        shortLabel: 'Period concerns through life',
       },
       {
+        // NP #6 — keep as-is
         id: 'cycle_changed',
         text: 'Has your cycle changed in the last 1–2 years?',
         inputType: 'yes_no',
         category: null,
         clinicianNotes: 'Cycle changes signal perimenopause.',
+        shortLabel: 'Cycle changed (1–2 yrs)',
       },
+      // NP #7 (>14 consecutive days of bleeding) — removed; contraindication removed per NP
       {
-        id: 'prolonged_bleeding',
-        text: 'Have you had more than 14 consecutive days of bleeding in the last year?',
-        inputType: 'yes_no',
-        category: 'ABSOLUTE_CI',
-        triggerOn: 'yes',
-        clinicianNotes:
-          'This does NOT automatically indicate abnormal bleeding — prolonged bleeding is common pre/perimenopause. This is ONLY a contraindication if bleeding occurs >1 year after the final menses. Example: last period Jan 15, 2023 → no bleeding → then new vaginal bleeding Feb 3–6, 2024 = concern. Use CI DISCLAIMER only in that context. Note: If this has already been investigated and records are available (e.g. ultrasound report or other workup), we can proceed with booking — flag for NP review. Also note: this is an absolute CI to estradiol specifically, but if the prolonged bleeding is long-standing/chronic in nature, it may be addressable with progesterone — NP to assess.',
-      },
-      {
+        // NP #8 — keep question + flag; estrogen-context note added
         id: 'postmenopausal_bleeding',
         text: 'Have you had vaginal bleeding after going >1 year without a period?',
         inputType: 'yes_no',
         category: 'OUTSIDE_SCOPE',
         triggerOn: 'yes',
         clinicianNotes:
-          'Postmenopausal bleeding must be investigated for endometrial/other cancer before any enrollment. Do NOT book. Use OUTSIDE SCOPE DISCLAIMER. Note: If this has already been investigated and records are available (e.g. ultrasound report or other workup confirming benign etiology), we may be able to proceed — flag for NP review before booking.',
+          'Postmenopausal bleeding must be investigated for endometrial/other cancer before any enrollment. Do NOT book. If already investigated with records available (e.g. ultrasound confirming benign etiology), flag for NP review before booking. NP note: if the bleeding occurred while the patient is already on estrogen therapy, this may not be a contraindication — flag for NP.',
+        shortLabel: 'Bleeding >1 yr post-period',
       },
     ],
   },
@@ -85,94 +72,97 @@ export const sections: Section[] = [
     description: 'Gynecological and reproductive health conditions.',
     questions: [
       {
+        // NP #9 — keep question; contraindication removed
         id: 'endometriosis',
         text: 'Endometriosis',
         inputType: 'yes_no',
-        category: 'RELATIVE_CI',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes: 'Estrogen may stimulate disease. NP to assess. Use CI DISCLAIMER.',
+        clinicianNotes: 'Estrogen may stimulate disease — context for NP. No longer flagged as a contraindication.',
+        shortLabel: 'Endometriosis',
       },
       {
+        // NP #10 — keep question; clinician flag removed
         id: 'pcos',
         text: 'Polycystic Ovarian Syndrome (PCOS)',
         inputType: 'yes_no',
-        category: 'NOTE',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes: 'Does not exclude HRT but affects hormone balance. Flag for NP.',
+        clinicianNotes: 'Does not exclude HRT; affects hormone balance. Context for NP.',
+        shortLabel: 'PCOS',
       },
       {
+        // NP #11 — keep question; relative contraindication removed
         id: 'adenomyosis',
         text: 'Adenomyosis',
         inputType: 'yes_no',
-        category: 'RELATIVE_CI',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes: 'Progestogen-based therapy preferred. Use CI DISCLAIMER.',
+        clinicianNotes: 'Progestogen-based therapy often preferred — context for NP. No longer flagged.',
+        shortLabel: 'Adenomyosis',
       },
       {
+        // NP #12 — keep question; CI removed
         id: 'uterine_fibroids',
         text: 'Uterine Fibroids',
         inputType: 'yes_no',
-        category: 'RELATIVE_CI',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes: 'Estrogen may promote growth. NP assessment required. Use CI DISCLAIMER.',
+        clinicianNotes: 'Estrogen may promote growth — context for NP. No longer flagged.',
+        shortLabel: 'Uterine fibroids',
       },
       {
+        // NP #13 — keep question + flag
         id: 'abnormal_uterine_bleeding',
         text: 'Abnormal Uterine Bleeding (diagnosed)',
         inputType: 'yes_no',
         category: 'ABSOLUTE_CI',
         triggerOn: 'yes',
         clinicianNotes: 'Do not proceed until etiology confirmed. Use CI DISCLAIMER.',
+        shortLabel: 'Abnormal uterine bleeding',
       },
       {
+        // NP #14 — keep question + NOTE flag; clinician note removed
         id: 'pmdd',
         text: 'Premenstrual Dysphoric Disorder (PMDD)',
         inputType: 'yes_no',
         category: 'NOTE',
         triggerOn: 'yes',
-        clinicianNotes: 'Not a contraindication; hormones may help or worsen. Flag for NP.',
+        clinicianNotes: '',
+        shortLabel: 'PMDD',
       },
       {
+        // NP #15 — keep question + NOTE flag; clinician note removed
         id: 'postpartum_psych',
         text: 'Postpartum anxiety / depression / psychosis',
         inputType: 'yes_no',
         category: 'NOTE',
         triggerOn: 'yes',
-        clinicianNotes: 'Relevant mental health history. Flag for NP.',
+        clinicianNotes: '',
+        shortLabel: 'Postpartum mental health',
       },
       {
+        // NP #16 — keep question; note removed
         id: 'infertility',
         text: 'Infertility (history of)',
         inputType: 'yes_no',
-        category: 'NOTE',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes: 'Not a contraindication. Clinical context for NP.',
+        clinicianNotes: '',
+        shortLabel: 'Infertility history',
       },
+      // NP #17 (PID) — removed; note removed per NP
       {
-        id: 'pid',
-        text: 'Pelvic Inflammatory Disease (PID)',
-        inputType: 'yes_no',
-        category: 'NOTE',
-        triggerOn: 'yes',
-        clinicianNotes: 'Not a contraindication. Note for NP.',
-      },
-      {
+        // NP #18 — keep question; NOTE flag removed, clinical context retained
         id: 'hysterectomy',
         text: 'Hysterectomy',
         inputType: 'yes_no',
-        category: 'NOTE',
+        category: null,
         triggerOn: 'yes',
         clinicianNotes: 'If yes → progestogen may not be required. NP to confirm.',
+        shortLabel: 'Hysterectomy',
       },
-      {
-        id: 'ovaries_intact',
-        text: 'Still have your ovaries?',
-        inputType: 'yes_no',
-        category: 'NOTE',
-        triggerOn: 'no',
-        conditionalOn: { questionId: 'hysterectomy', answer: 'yes' },
-        clinicianNotes: 'Affects hormone production; important for treatment planning.',
-      },
+      // NP #19 (Still have your ovaries?) — removed; notes removed per NP
     ],
   },
   {
@@ -181,125 +171,139 @@ export const sections: Section[] = [
     description: 'General medical conditions and contraindication screening.',
     questions: [
       {
+        // NP #20 — keep question + flag; reframed around unmanaged conditions, N/A enabled
         id: 'diabetes',
         text: 'Diabetes — is it currently well controlled?',
         inputType: 'yes_no',
         category: 'RELATIVE_CI',
         triggerOn: 'no',
+        allowNA: true,
         clinicianNotes:
-          'Uncontrolled DM = exclusion criterion. If not controlled, do not book. Use CI DISCLAIMER.',
+          'For this program we cannot take anyone with a currently unmanaged condition (e.g. T2DM, HTN, CAD). If well controlled, not a barrier; if uncontrolled, do not book. Select N/A if the patient does not have diabetes.',
         helpfulProbe: 'When was the last time you were assessed by a doctor regarding your diabetes?',
+        shortLabel: 'Diabetes controlled?',
       },
       {
+        // NP #21 — keep question + flag; reframed around unmanaged conditions, N/A enabled
         id: 'hypertension',
         text: 'High Blood Pressure / Hypertension — is it currently well controlled?',
         inputType: 'yes_no',
         category: 'RELATIVE_CI',
         triggerOn: 'no',
+        allowNA: true,
         clinicianNotes:
-          'Uncontrolled HTN = exclusion criterion. If not controlled, do not book. Use CI DISCLAIMER.',
+          'For this program we cannot take anyone with a currently unmanaged condition (e.g. T2DM, HTN, CAD). If well controlled, not a barrier; if uncontrolled, do not book. Select N/A if the patient does not have hypertension.',
         helpfulProbe: 'When was the last time you were assessed by a doctor regarding your blood pressure?',
+        shortLabel: 'Hypertension controlled?',
       },
       {
+        // NP #22 — keep question + flag; severity/stage note kept
         id: 'liver_disease',
         text: 'Liver Disease',
         inputType: 'yes_no',
         category: 'ABSOLUTE_CI',
         triggerOn: 'yes',
-        clinicianNotes: 'Active liver disease = absolute estrogen CI. Use CI DISCLAIMER.',
+        clinicianNotes: 'Active liver disease = absolute estrogen CI — depends on severity/stage. Flag for NP. Use CI DISCLAIMER.',
+        shortLabel: 'Liver disease',
       },
+      // NP #23 (Kidney Disease) — removed; note removed per NP
+      // NP #24 (Allergy to Peanuts) — removed per NP
       {
-        id: 'kidney_disease',
-        text: 'Kidney Disease',
-        inputType: 'yes_no',
-        category: 'NOTE',
-        triggerOn: 'yes',
-        clinicianNotes: 'Not an absolute CI but affects drug metabolism. Flag for NP.',
-      },
-      {
-        id: 'peanut_allergy',
-        text: 'Allergy to Peanuts',
-        inputType: 'yes_no',
-        category: 'ABSOLUTE_CI',
-        triggerOn: 'yes',
-        clinicianNotes:
-          'Utrogestan/micronized progesterone contains peanut oil — absolute CI for that formulation. Use CI DISCLAIMER.',
-      },
-      {
+        // NP #25 — keep question; contraindication changed to clinician reference note (no flag)
         id: 'dvt',
         text: 'Deep Vein Thrombosis (DVT)',
         inputType: 'yes_no',
-        category: 'ABSOLUTE_CI',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes:
-          'History of DVT = absolute estrogen CI. Transdermal may be safer — NP decision. Use CI DISCLAIMER.',
+        clinicianNotes: 'History of DVT — transdermal estrogen may be safer. Clinician reference for NP; no specific flag required.',
+        shortLabel: 'DVT history',
       },
       {
+        // NP #26 — keep question; contraindication changed to clinician reference note (no flag)
         id: 'pe',
         text: 'Pulmonary Embolism (PE)',
         inputType: 'yes_no',
-        category: 'ABSOLUTE_CI',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes: 'History of PE = absolute estrogen CI. Use CI DISCLAIMER.',
+        clinicianNotes: 'History of PE — clinician reference for NP; no specific flag required.',
+        shortLabel: 'PE history',
       },
       {
+        // NP #27 — keep question; warning removed
         id: 'stroke_tia',
         text: 'Stroke or TIA',
         inputType: 'yes_no',
-        category: 'ABSOLUTE_CI',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes: 'Previous stroke/TIA = absolute estrogen CI. Use CI DISCLAIMER.',
+        clinicianNotes: 'Previous stroke/TIA — clinician reference for NP. Warning removed per NP.',
+        shortLabel: 'Stroke / TIA',
       },
       {
+        // NP #28 — keep question; warning removed
         id: 'mi_chd',
         text: 'MI / Heart Attack (Coronary Heart Disease)',
         inputType: 'yes_no',
-        category: 'ABSOLUTE_CI',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes: 'Active/previous CHD = absolute estrogen CI. Use CI DISCLAIMER.',
+        clinicianNotes: 'Active/previous CHD — clinician reference for NP. Warning removed per NP.',
+        shortLabel: 'MI / heart disease',
       },
       {
+        // NP #29 — keep question; not a contraindication, ask for specific type
         id: 'bleeding_disorders',
         text: 'Bleeding or Blood Disorders',
         inputType: 'yes_no',
-        category: 'RELATIVE_CI',
+        category: null,
         triggerOn: 'yes',
-        clinicianNotes: 'Assess bleeding risk. NP must evaluate. Use CI DISCLAIMER.',
+        clinicianNotes: 'Not a contraindication. Record the specific disorder for NP.',
+        helpfulProbe: 'If yes, ask which specific bleeding or blood disorder.',
+        shortLabel: 'Bleeding / blood disorder',
       },
       {
+        // NP #30 — keep question; supportive-care pathway disclaimer
         id: 'breast_cancer_personal',
         text: 'Breast Cancer (personal history)',
         inputType: 'yes_no',
         category: 'OUTSIDE_SCOPE',
         triggerOn: 'yes',
         clinicianNotes:
-          'Personal history of breast cancer — not appropriate for this program. Use OUTSIDE SCOPE DISCLAIMER. Do NOT book.',
+          'Not a contraindication for all hormones, but our program is not currently positioned to treat with hormones. Offer supportive/symptomatic care and ask if the patient would like to be contacted if/when the NP reviews their chart and can provide care. Do NOT book for hormone therapy now.',
+        customDisclaimer: SUPPORTIVE_CARE_DISCLAIMER,
+        shortLabel: 'Breast cancer (personal)',
       },
       {
+        // NP #31 — keep question; supportive-care pathway disclaimer
         id: 'ovarian_cancer_personal',
         text: 'Ovarian Cancer (personal history)',
         inputType: 'yes_no',
         category: 'OUTSIDE_SCOPE',
         triggerOn: 'yes',
         clinicianNotes:
-          'Personal history of ovarian cancer — not appropriate for this program. Use OUTSIDE SCOPE DISCLAIMER. Do NOT book.',
+          'Not a contraindication for all hormones, but our program is not currently positioned to treat with hormones. Offer supportive/symptomatic care and ask if the patient would like to be contacted if/when the NP reviews their chart and can provide care. Do NOT book for hormone therapy now.',
+        customDisclaimer: SUPPORTIVE_CARE_DISCLAIMER,
+        shortLabel: 'Ovarian cancer (personal)',
       },
       {
+        // NP #32 — keep question; supportive-care pathway disclaimer
         id: 'endometrial_cancer_personal',
         text: 'Endometrial Cancer (personal history)',
         inputType: 'yes_no',
         category: 'OUTSIDE_SCOPE',
         triggerOn: 'yes',
         clinicianNotes:
-          'Personal history of endometrial cancer — not appropriate for this program. Use OUTSIDE SCOPE DISCLAIMER. Do NOT book.',
+          'Not a contraindication for all hormones, but our program is not currently positioned to treat with hormones. Offer supportive/symptomatic care and ask if the patient would like to be contacted if/when the NP reviews their chart and can provide care. Do NOT book for hormone therapy now.',
+        customDisclaimer: SUPPORTIVE_CARE_DISCLAIMER,
+        shortLabel: 'Endometrial cancer (personal)',
       },
       {
+        // NP #33 — keep as-is
         id: 'colon_cancer_personal',
         text: 'Colon Cancer (personal history)',
         inputType: 'yes_no',
         category: 'NOTE',
         triggerOn: 'yes',
         clinicianNotes: 'Not a direct CI. HRT may actually be protective. Flag for NP.',
+        shortLabel: 'Colon cancer (personal)',
       },
     ],
   },
@@ -309,39 +313,50 @@ export const sections: Section[] = [
     description: '1st degree relatives only: mother, sister, daughter.',
     questions: [
       {
+        // NP #34 — keep question; supportive-care pathway disclaimer
         id: 'breast_cancer_family',
         text: 'Breast Cancer (1st degree relative)',
         inputType: 'yes_no',
         category: 'OUTSIDE_SCOPE',
         triggerOn: 'yes',
         clinicianNotes:
-          '1st degree family history of breast cancer — outside current NP comfort scope. Use OUTSIDE SCOPE DISCLAIMER. Do NOT book.',
+          'Not a contraindication for all hormones, but our program is not currently positioned to treat with hormones. Offer supportive/symptomatic care and ask if the patient would like to be contacted if/when the NP reviews their chart and can provide care. Do NOT book for hormone therapy now.',
+        customDisclaimer: SUPPORTIVE_CARE_DISCLAIMER,
+        shortLabel: 'Breast cancer (family)',
       },
       {
+        // NP #35 — keep question; supportive-care pathway disclaimer
         id: 'ovarian_cancer_family',
         text: 'Ovarian Cancer (1st degree relative)',
         inputType: 'yes_no',
         category: 'OUTSIDE_SCOPE',
         triggerOn: 'yes',
         clinicianNotes:
-          '1st degree family history of ovarian cancer — outside program scope. Use OUTSIDE SCOPE DISCLAIMER. Do NOT book.',
+          'Not a contraindication for all hormones, but our program is not currently positioned to treat with hormones. Offer supportive/symptomatic care and ask if the patient would like to be contacted if/when the NP reviews their chart and can provide care. Do NOT book for hormone therapy now.',
+        customDisclaimer: SUPPORTIVE_CARE_DISCLAIMER,
+        shortLabel: 'Ovarian cancer (family)',
       },
       {
+        // NP #36 — keep question; supportive-care pathway disclaimer
         id: 'endometrial_cancer_family',
         text: 'Endometrial Cancer (1st degree relative)',
         inputType: 'yes_no',
         category: 'OUTSIDE_SCOPE',
         triggerOn: 'yes',
         clinicianNotes:
-          '1st degree family history of endometrial cancer — outside program scope. Use OUTSIDE SCOPE DISCLAIMER. Do NOT book.',
+          'Not a contraindication for all hormones, but our program is not currently positioned to treat with hormones. Offer supportive/symptomatic care and ask if the patient would like to be contacted if/when the NP reviews their chart and can provide care. Do NOT book for hormone therapy now.',
+        customDisclaimer: SUPPORTIVE_CARE_DISCLAIMER,
+        shortLabel: 'Endometrial cancer (family)',
       },
       {
+        // NP #37 — keep as-is
         id: 'colon_cancer_family',
         text: 'Colon Cancer (1st degree relative)',
         inputType: 'yes_no',
         category: 'NOTE',
         triggerOn: 'yes',
         clinicianNotes: 'Not a CI. Relevant for overall cancer risk counselling. Flag for NP.',
+        shortLabel: 'Colon cancer (family)',
       },
     ],
   },
@@ -351,13 +366,15 @@ export const sections: Section[] = [
     description: 'Recent medical evaluations.',
     questions: [
       {
+        // NP #38 — keep question + flag; "not absolute" guidance added
         id: 'recent_bloodwork',
         text: 'Physical assessment and/or bloodwork in the last 2 years?',
         inputType: 'yes_no',
         category: 'OUTSIDE_SCOPE',
         triggerOn: 'no',
         clinicianNotes:
-          'If NO → baseline health status unknown; uncontrolled conditions may be undetected. Patient must have up-to-date bloodwork before enrollment. Use OUTSIDE SCOPE DISCLAIMER. Do NOT book.',
+          'Not an absolute contraindication, but baseline health status must be known before enrollment. If NO, patient needs up-to-date bloodwork first. Be sure to notify the patient that if any other concerns are unmanaged we cannot accept them for the program.',
+        shortLabel: 'Bloodwork in last 2 yrs',
       },
     ],
   },
@@ -367,11 +384,13 @@ export const sections: Section[] = [
     description: 'Patient will complete symptom scale separately — this captures the primary concern.',
     questions: [
       {
+        // NP #39 — keep as-is
         id: 'most_bothersome_symptom',
         text: 'What is the most bothersome symptom for you right now?',
         inputType: 'text',
         category: null,
         clinicianNotes: 'Guides treatment priority. Record for NP. No CI logic attached.',
+        shortLabel: 'Most bothersome symptom',
       },
     ],
   },

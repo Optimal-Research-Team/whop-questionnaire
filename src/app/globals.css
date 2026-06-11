@@ -1,33 +1,50 @@
 @import "tailwindcss";
 
 @theme {
-  --color-cream-50: #fefdfb;
-  --color-cream-100: #fdf9f3;
-  --color-cream-200: #f5efe4;
-  --color-warm-50: #faf9f7;
-  --color-warm-100: #f3f1ed;
-  --color-warm-200: #e8e4dd;
-  --color-warm-300: #d4cfc5;
-  --color-warm-400: #a09888;
-  --color-warm-500: #7a7164;
-  --color-warm-600: #5c5549;
-  --color-warm-700: #3d3832;
-  --color-warm-800: #2a2622;
-  --color-warm-900: #1a1714;
+  /* Warm cream backgrounds (beoptimal.ca off-white scale) */
+  --color-cream-50: #fffcf7;
+  --color-cream-100: #fdf8f1;
+  --color-cream-200: #f7efe3;
+  --color-cream-300: #efe4d3;
 
-  --color-flag-outside: #dc2626;
-  --color-flag-absolute: #ea580c;
-  --color-flag-relative: #d97706;
-  --color-flag-note: #2563eb;
+  /* Warm neutral / ink text scale (slightly green-tinted near-black) */
+  --color-warm-50: #faf7f2;
+  --color-warm-100: #f1ece3;
+  --color-warm-200: #e6ddd0;
+  --color-warm-300: #d6c9b6;
+  --color-warm-400: #a89a83;
+  --color-warm-500: #7d7160;
+  --color-warm-600: #5b5345;
+  --color-warm-700: #3d3a30;
+  --color-warm-800: #2a2922;
+  --color-warm-900: #1f2418;
 
-  --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
+  /* Sage / forest-green brand scale (--new-accent #2c4e25, light #519044) */
+  --color-sage-50: #f1f5ef;
+  --color-sage-100: #e2eddf;
+  --color-sage-200: #c7d9c0;
+  --color-sage-300: #a3c098;
+  --color-sage-400: #6f9a62;
+  --color-sage-500: #519044;
+  --color-sage-600: #3f7233;
+  --color-sage-700: #2c4e25;
+  --color-sage-800: #234020;
+  --color-sage-900: #18301a;
+
+  /* Warm beige accents (sidebar tints, decorative) */
+  --color-beige-100: #ffeedc;
+  --color-beige-200: #ffdeb8;
+  --color-beige-300: #edcfa9;
+
+  /* Clinical flag colors (kept standard for instant recognition) */
+  --color-flag-outside: #b91c1c;
+  --color-flag-absolute: #c2410c;
+  --color-flag-relative: #b45309;
+  --color-flag-note: #2c4e25;
+
+  --font-sans: 'Public Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  --font-serif: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
-}
-
-@font-face {
-  font-family: 'Inter';
-  src: local('Inter');
-  font-display: swap;
 }
 
 html {
@@ -37,36 +54,52 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: var(--color-cream-50);
+  background-color: var(--color-cream-50);
+  /* Soft warm radial wash so the cream never reads as flat white */
+  background-image:
+    radial-gradient(120% 80% at 12% -10%, rgba(255, 222, 184, 0.35) 0%, transparent 55%),
+    radial-gradient(90% 70% at 100% 0%, rgba(226, 237, 223, 0.5) 0%, transparent 50%);
+  background-attachment: fixed;
   color: var(--color-warm-900);
+  font-feature-settings: "cv11", "ss01";
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+  font-feature-settings: "liga", "dlig";
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 7px;
+  height: 7px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
   background: var(--color-warm-300);
-  border-radius: 3px;
+  border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: var(--color-warm-400);
 }
 
 /* Focus ring */
 *:focus-visible {
-  outline: 2px solid var(--color-warm-400);
+  outline: 2px solid var(--color-sage-500);
   outline-offset: 2px;
   border-radius: 4px;
 }
 
-/* Textarea resize handle */
 textarea {
   resize: vertical;
+}
+
+@keyframes fade-in-up {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-row-in {
+  animation: fade-in-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
